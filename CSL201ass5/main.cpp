@@ -15,14 +15,14 @@ using namespace std;
 
 
 
-map<int,string> hashtable;
+map<long,string> hashtable;
 static fstream f1;
 long prime;
 
 void insert(string word)
 {
     int count=0;
-    int a=word[0]%prime;
+    long a=word[0]%prime;
     
         while (hashtable[a]!="\0")
         {
@@ -52,11 +52,11 @@ long get_prime(long a)
 
 
 
-int search(string word)
+long search(string word)
 {
     int count=1;
-    int a=word[0]%prime;
-    int makesure=a;
+    long a=word[0]%prime;
+    long makesure=a;
     
     while (hashtable[a]!="\0")
     {
@@ -90,7 +90,9 @@ void initial()
 
 void compress(string data)
 {
-    f1.open("/Users/robinmalhotra2/Desktop/ass5compressed.txt",ios::in|ios::out);
+    ofstream f2;
+    string s2;
+    f2.open("/Users/robinmalhotra2/Desktop/ass5compression.txt",ios::in|ios::out);
     string current;
     int j=0;
     
@@ -100,9 +102,14 @@ void compress(string data)
         if (search(current)==-1)
         {
             insert(current);
+            s2=current.at(current.size()-1);
             current.pop_back();
-            f1<<search(current)<<" ";
-            j=i;
+            if (search(current)!=-1)
+            {
+                f2<<search(current)<<" ";
+                
+            }
+             j=i;
         }
         
         else
@@ -111,24 +118,38 @@ void compress(string data)
         }
     }
     
-    f1.close();
+    
+    
+    
+    
+    cout<<"Somrhitng";
+    
+    
+    f2<<search(s2);
+    
+    
+    f2.close();
 }
 
 
 void createhashfile()
 {
-    f1.open("/Users/robinmalhotra2/Desktop/hash.txt",ios::in|ios::out);
+    ofstream f2;
+    f2.open("/Users/robinmalhotra2/Desktop/hash.txt",ios::in|ios::out);
     
     for (int i=0; i<hashtable.size(); i++)
     {
         if (hashtable[i]!="\0")
         {
-            f1<<i<<"="<<hashtable[i]<<"\n";
+            f2<<i<<"="<<hashtable[i]<<"\n";
         }
     }
     
-    f1.close();
+    f2.close();
+    exit(1);
 }
+
+
 
 
 
@@ -139,12 +160,7 @@ int main()
     f1.open("/Users/robinmalhotra2/Desktop/csl201ass5.txt",ios::in|ios::out);
     string data;
     
-   
-    
-    
     getline(f1,data);
-    
-    f1.close();
 
     prime=data.length();
     prime=get_prime(prime+128);
@@ -154,8 +170,10 @@ int main()
     compress(data);
     
     
-    createhashfile();
+    f1.close();
 
     
+    createhashfile();
+
     return 1;
 }
